@@ -1,0 +1,77 @@
+---
+import Layout from "../layouts/Layout.astro";
+import RouterCard from "../components/RouterCard.astro";
+import { getAllRouters } from "../lib/db";
+
+const routers = await getAllRouters();
+---
+
+<Layout title="Home" description="Explore the top 10 WiFi routers for speed, coverage, and reliability">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white">
+    <div class="max-w-screen-xl mx-auto px-4 py-16 md:py-24 text-center">
+      <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-6xl">
+        Find Your Perfect WiFi Router
+      </h1>
+      <p class="mb-8 text-lg font-normal text-blue-100 lg:text-xl sm:px-16 lg:px-48">
+        Compare the top 10 WiFi routers on the market. From blazing-fast WiFi 6E mesh systems to budget-friendly options, find the router that fits your needs.
+      </p>
+      <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+        <a href="#routers" class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-400 focus:ring-4 focus:ring-blue-300 transition-colors">
+          Browse Routers
+          <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="bg-white border-b border-gray-200">
+    <div class="max-w-screen-xl mx-auto px-4 py-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div>
+          <dt class="text-3xl md:text-4xl font-extrabold text-blue-600">10</dt>
+          <dd class="text-gray-500 font-medium mt-1">Top Routers</dd>
+        </div>
+        <div>
+          <dt class="text-3xl md:text-4xl font-extrabold text-blue-600">6</dt>
+          <dd class="text-gray-500 font-medium mt-1">Major Brands</dd>
+        </div>
+        <div>
+          <dt class="text-3xl md:text-4xl font-extrabold text-blue-600">WiFi 6E</dt>
+          <dd class="text-gray-500 font-medium mt-1">Latest Standard</dd>
+        </div>
+        <div>
+          <dt class="text-3xl md:text-4xl font-extrabold text-blue-600">4.5</dt>
+          <dd class="text-gray-500 font-medium mt-1">Avg. Rating</dd>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Router Grid -->
+  <section id="routers" class="max-w-screen-xl mx-auto px-4 py-12">
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">Our Router Collection</h2>
+      <p class="text-gray-500 text-lg">Handpicked routers tested and reviewed by networking experts</p>
+    </div>
+
+    {routers.length === 0 ? (
+      <div class="text-center py-16">
+        <svg class="mx-auto w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+        </svg>
+        <h3 class="text-xl font-semibold text-gray-500">No routers found</h3>
+        <p class="text-gray-400 mt-2">Database may not be seeded yet. Run <code class="bg-gray-100 px-2 py-1 rounded text-sm">npm run db:seed</code></p>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {routers.map((router) => (
+          <RouterCard router={router} />
+        ))}
+      </div>
+    )}
+  </section>
+</Layout>

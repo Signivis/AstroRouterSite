@@ -1,0 +1,24 @@
+{
+  "name": "astro-router-catalog",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "db:seed": "node --loader ts-node/esm scripts/seed.ts"
+  },
+  "dependencies": {
+    "@astrojs/vercel": "^8.1.1",
+    "@neondatabase/serverless": "^1.0.2",
+    "astro": "^5.7.5"
+  },
+  "devDependencies": {
+    "@astrojs/tailwind": "^6.0.2",
+    "flowbite": "^3.1.2",
+    "tailwindcss": "^3.4.17",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
