@@ -1,7 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import RouterCard from "../components/RouterCard.astro";
-import { routers } from "../data/routers";
+import { getAllRouters } from "../lib/db";
+
+const routers = await getAllRouters();
 ---
 
 <Layout title="Home" description="Explore the top 10 WiFi routers for speed, coverage, and reliability">
@@ -12,7 +14,7 @@ import { routers } from "../data/routers";
         Find Your Perfect WiFi Router
       </h1>
       <p class="mb-8 text-lg font-normal text-blue-100 lg:text-xl sm:px-16 lg:px-48">
-        Compare the top 10 WiFi routers on the market. From blazing-fast WiFi 6E mesh systems to budget-friendly options, find the router that fits your needs.
+        Compare the top 10 WiFi routers on the market. From blazing-fast WiFi 7 mesh systems to budget-friendly WiFi 6 options, find the router that fits your needs.
       </p>
       <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
         <a href="#routers" class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-400 focus:ring-4 focus:ring-blue-300 transition-colors">
@@ -34,11 +36,11 @@ import { routers } from "../data/routers";
           <dd class="text-gray-500 font-medium mt-1">Top Routers</dd>
         </div>
         <div>
-          <dt class="text-3xl md:text-4xl font-extrabold text-blue-600">6</dt>
+          <dt class="text-3xl md:text-4xl font-extrabold text-blue-600">7</dt>
           <dd class="text-gray-500 font-medium mt-1">Major Brands</dd>
         </div>
         <div>
-          <dt class="text-3xl md:text-4xl font-extrabold text-blue-600">WiFi 6E</dt>
+          <dt class="text-3xl md:text-4xl font-extrabold text-blue-600">WiFi 7</dt>
           <dd class="text-gray-500 font-medium mt-1">Latest Standard</dd>
         </div>
         <div>
@@ -56,10 +58,20 @@ import { routers } from "../data/routers";
       <p class="text-gray-500 text-lg">Handpicked routers tested and reviewed by networking experts</p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {routers.map((router) => (
-        <RouterCard router={router} />
-      ))}
-    </div>
+    {routers.length === 0 ? (
+      <div class="text-center py-16">
+        <svg class="mx-auto w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+        </svg>
+        <h3 class="text-xl font-semibold text-gray-500">No routers found</h3>
+        <p class="text-gray-400 mt-2">Run <code class="bg-gray-100 px-2 py-1 rounded text-sm">npm run db:seed</code> to populate the database.</p>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {routers.map((router) => (
+          <RouterCard router={router} />
+        ))}
+      </div>
+    )}
   </section>
 </Layout>
