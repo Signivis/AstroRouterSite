@@ -1,21 +1,28 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import StarRating from "../../components/StarRating.astro";
-import { getRouterBySlug } from "../../lib/db";
-import { t, localePath, DEFAULT_UI } from "../../lib/i18n";
+import Layout from "../../../layouts/Layout.astro";
+import StarRating from "../../../components/StarRating.astro";
+import { getRouterBySlug, getUITranslations } from "../../../lib/db";
+import { isValidLocale, t, localePath, DEFAULT_UI, type Locale } from "../../../lib/i18n";
 
-const { slug } = Astro.params;
-const locale = "en";
-const ui = DEFAULT_UI;
+const { lang, slug } = Astro.params;
 
-if (!slug) {
-  return Astro.redirect("/");
+if (!lang || !isValidLocale(lang) || lang === "en") {
+  return Astro.redirect(slug ? `/router/${slug}` : "/");
 }
 
-const router = await getRouterBySlug(slug);
+if (!slug) {
+  return Astro.redirect(`/${lang}`);
+}
+
+const locale = lang as Locale;
+const [router, dbUI] = await Promise.all([
+  getRouterBySlug(slug, locale),
+  getUITranslations(locale),
+]);
+const ui = { ...DEFAULT_UI, ...dbUI };
 
 if (!router) {
-  return Astro.redirect("/");
+  return Astro.redirect(`/${lang}`);
 }
 
 const homePath = localePath("/", locale);

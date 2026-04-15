@@ -1,17 +1,26 @@
 ---
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import type { Locale } from "../lib/i18n";
+import type { UITranslations } from "../lib/db";
 
 interface Props {
   title: string;
   description?: string;
+  locale?: Locale;
+  ui?: UITranslations;
 }
 
-const { title, description = "Discover the best WiFi routers for your home and office" } = Astro.props;
+const {
+  title,
+  description = "Discover the best WiFi routers for your home and office",
+  locale = "en",
+  ui = {},
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,10 +29,10 @@ const { title, description = "Discover the best WiFi routers for your home and o
     <title>{title} | RouterHub</title>
   </head>
   <body class="bg-gray-50 min-h-screen flex flex-col">
-    <Navbar />
+    <Navbar locale={locale} ui={ui} currentPath={Astro.url.pathname} />
     <main class="flex-1">
       <slot />
     </main>
-    <Footer />
+    <Footer locale={locale} ui={ui} />
   </body>
 </html>

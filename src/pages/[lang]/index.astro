@@ -1,12 +1,21 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import RouterCard from "../components/RouterCard.astro";
-import { getAllRouters } from "../lib/db";
-import { t, DEFAULT_UI } from "../lib/i18n";
+import Layout from "../../layouts/Layout.astro";
+import RouterCard from "../../components/RouterCard.astro";
+import { getAllRouters, getUITranslations } from "../../lib/db";
+import { isValidLocale, t, DEFAULT_UI, type Locale } from "../../lib/i18n";
 
-const locale = "en";
-const ui = DEFAULT_UI;
-const routers = await getAllRouters();
+const { lang } = Astro.params;
+
+if (!lang || !isValidLocale(lang) || lang === "en") {
+  return Astro.redirect("/");
+}
+
+const locale = lang as Locale;
+const [routers, dbUI] = await Promise.all([
+  getAllRouters(locale),
+  getUITranslations(locale),
+]);
+const ui = { ...DEFAULT_UI, ...dbUI };
 ---
 
 <Layout title={t(ui, "nav.home")} description={t(ui, "hero.description")} locale={locale} ui={ui}>
